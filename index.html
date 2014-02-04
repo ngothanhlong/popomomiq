@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<style type="text/css">
+       canvas{
+       	 
+       	  background: black;
+       }  
+       div{
+       	  margin:0 auto;
+       	   text-align: center;
+
+       }
+	</style>
+</head>
+<body>
+	<div>
+	    <canvas id="canvas" ></canvas>
+   </div>
+   <script type="text/javascript">
+    
+       // khai bao cac bien can su dung
+       var canvas, ctx;
+       var maps ={
+        	  width:480 ,
+        	  height:320
+
+          }
+ 
+    /*var keycode ={
+      LEFT_ARROW: 37,
+      UP_ARROW: 38,
+      RIGHT_ARROW: 39,
+      DOWN_ARROW: 40,
+    }*/
+       maps.init = function(){
+
+       	  canvas = document.getElementById('canvas');
+	        ctx = canvas.getContext('2d');
+          this.setSize();
+          //player.draw();
+          this.loop();
+       }   
+       maps.draw = function() {
+
+       	 ctx.beginPath();
+         ctx.clearRect(0,0,canvas.width,canvas.height);
+         
+         for (var i = canvas.width; i >= 0; i-=32) {
+         	  ctx.moveTo(i,0);
+         	  ctx.lineTo(i,canvas.height);
+        };
+        for (var i = canvas.height ;i >= 0; i-=32) {
+        	 ctx.moveTo(0,i);
+        	 ctx.lineTo(canvas.width,i);
+        };
+
+        ctx.strokeStyle = 'white';
+        ctx.stroke();
+       }
+       maps.setSize= function(){
+
+       	  canvas.width = this.width;
+       	  canvas.height = this.height;
+       }
+       maps.loop= function(){
+       	 maps.draw();
+       	 player.draw();
+       	 maps.update();
+         maps.limit();
+         cube.draw();
+
+       	 setTimeout(
+            function() {
+            		maps.loop();
+            },
+              100
+       	 	);
+       }
+       maps.update = function(){
+       	 player.update();
+       }
+      // 
+     var player = {
+         x: 0,
+     	 y:0,
+     	 width:32,
+     	 height:32
+     
+     }
+     player.update = function(){}
+     player.draw = function(){
+          ctx.fillStyle ="red";
+          ctx.fillRect(this.x,this.y,this.width,this.height);
+
+     }
+     // giới hạn dừng
+     maps.limit = function(){
+     	var check = false;
+     	if( player.x == cube.x || player.y == cube.y)
+     	{
+            //nếu chạm vào thành thì dừng
+             check = true;
+            cube.x  = player.x,
+            cube.y = player.y;
+            
+     	}
+     }
+
+     // xu lý sự kiện
+    window.onkeydown = function(e){
+     
+			var key = e.keyCode;
+			
+      switch(key){
+         
+         case 37:{ player.x -=32 ; break;}
+         case 39:{ player.x +=32 ; break;}
+         case 38:{ player.y -=32 ; break;}
+         case 40:{ player.y +=32 ; break;}
+      }
+                           Console.log(e.keyCode);
+
+      
+
+     };
+     //cac khoi hinh tu sinh
+    var cube ={
+      x:32,
+      y:95,
+      width:32,
+      height:32
+    }
+    cube.draw = function(){
+       ctx.fillStyle="blue";
+       ctx.fillRect(this.x,this.y,this.width,this.height);
+    }
+
+   maps.init();
+   
+   </script>
+</body>
+</html>
